@@ -5,10 +5,10 @@ import {
   getAllUsers,
   getAllOrders,
   getAnalytics
-} from "../controllers/adminController.js";
+} from "../controllers/admincontroller.js";
 
-import authMiddleware from "../middleware/authMiddleware.js";
-import adminMiddleware from "../middleware/adminMiddleware.js";
+import authMiddleware from "../middleware/authmiddleware.js";
+import adminMiddleware from "../middleware/adminmiddleware.js";
 
 const router = express.Router();
 

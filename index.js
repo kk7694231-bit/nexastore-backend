@@ -15,13 +15,28 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigins = [
+  "https://nexastore-frotnend.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:3000"
+];
 
 app.use(express.json());
-app.use(cors());
-
-
-
-
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
+app.options("*", cors());
 
 app.get("/", (req, res) => {
   res.send("Amazon Clone Backend Running");
@@ -39,6 +54,13 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error"
+  });
+});
 
 const connectDB = async () => {
   if (!process.env.MONGO_URI) {

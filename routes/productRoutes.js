@@ -6,10 +6,10 @@ import {
   getProductById,
   updateProduct,
   deleteProduct
-} from "../controllers/productController.js";
+} from "../controllers/productcontroller.js";
 
-import authMiddleware from "../middleware/authMiddleware.js";
-import adminMiddleware from "../middleware/adminMiddleware.js";
+import authMiddleware from "../middleware/authmiddleware.js";
+import adminMiddleware from "../middleware/adminmiddleware.js";
 
 const router = express.Router();
 
