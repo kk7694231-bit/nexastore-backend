@@ -37,10 +37,12 @@ export const registerUser = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+   try {
+    console.log("Request Body:", req.body);
+    console.log("MONGO_URI Exists:", !!process.env.MONGO_URI);
+    console.log("JWT_SECRET Exists:", !!process.env.JWT_SECRET);
 
-    console.log("Email Received:", email);
+    const { email, password } = req.body;
 
     const user = await User.findOne({ email });
 
@@ -48,45 +50,35 @@ export const loginUser = async (req, res) => {
 
     if (!user) {
       return res.status(400).json({
-        message: "Invalid Email"
+        message: "User not found",
       });
     }
 
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    console.log("Password Match:", isMatch);
 
     if (!isMatch) {
       return res.status(400).json({
-        message: "Invalid Password"
+        message: "Invalid credentials",
       });
     }
 
     const token = jwt.sign(
-      {
-        id: user._id,
-        role: user.role
-      },
+      { id: user._id },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "7d"
-      }
+      { expiresIn: "7d" }
     );
 
-      res.status(200).json({
-      message: "Login Successful",
+    res.status(200).json({
       token,
-      role: user.role,
-      userId: user._id
-    }
-  );
-
+      user,
+    });
   } catch (error) {
-    console.log("Login Error:", error);
-
+    console.error("LOGIN ERROR:", error);
     res.status(500).json({
-      message: error.message
+      message: error.message,
+      stack: error.stack,
     });
   }
 };
