@@ -45,11 +45,10 @@ app.get("/mongo-uri-check", (req, res) => {
 
 app.get("/test-db", async (req, res) => {
   try {
-    const state = mongoose.connection.readyState;
-
     res.json({
-      mongoState: state,
-      message: "DB test route working"
+      mongoState: mongoose.connection.readyState,
+      mongoHost: mongoose.connection.host,
+      mongoName: mongoose.connection.name,
     });
   } catch (error) {
     res.status(500).json({
