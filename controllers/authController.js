@@ -5,9 +5,13 @@ import jwt from "jsonwebtoken";
 // Register User
 export const registerUser = async (req, res) => {
   try {
+    console.log("REGISTER BODY:", req.body);
+
     const { name, email, password } = req.body;
 
     const userExists = await User.findOne({ email });
+
+    console.log("USER EXISTS:", userExists);
 
     if (userExists) {
       return res.status(400).json({
@@ -17,6 +21,8 @@ export const registerUser = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    console.log("PASSWORD HASHED");
+
     const user = await User.create({
       name,
       email,
@@ -24,12 +30,15 @@ export const registerUser = async (req, res) => {
       role: "user"
     });
 
+    console.log("USER CREATED:", user);
+
     res.status(201).json({
       message: "Registration Successful"
     });
 
   } catch (error) {
-    console.log(error);
+    console.error("REGISTER ERROR:", error);
+
     res.status(500).json({
       message: error.message
     });
