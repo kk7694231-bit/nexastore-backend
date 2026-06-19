@@ -36,6 +36,14 @@ app.get("/", (req, res) => {
 });
 
 // mongoose
+app.get("/env-check", (req, res) => {
+  res.json({
+    hasMongoUri: !!process.env.MONGO_URI,
+    host:
+      process.env.MONGO_URI?.split("@")[1]?.split("/")[0] || "missing"
+  });
+});
+
 app.get("/mongo-uri-check", (req, res) => {
   res.json({
     hasMongoUri: !!process.env.MONGO_URI,
