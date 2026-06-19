@@ -28,7 +28,6 @@ app.use(
 );
 
 // Middleware
-app.use(cors());
 app.use(express.json());
 
 // Test Route
