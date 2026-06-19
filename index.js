@@ -36,6 +36,13 @@ app.get("/", (req, res) => {
 });
 
 // mongoose
+app.get("/mongo-uri-check", (req, res) => {
+  res.json({
+    hasMongoUri: !!process.env.MONGO_URI,
+    uriStart: process.env.MONGO_URI?.substring(0, 30),
+  });
+});
+
 app.get("/test-db", async (req, res) => {
   try {
     const state = mongoose.connection.readyState;
