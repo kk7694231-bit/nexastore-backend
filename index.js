@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
-
+import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
@@ -33,6 +33,22 @@ app.use(express.json());
 // Test Route
 app.get("/", (req, res) => {
   res.send("Amazon Clone Backend Running");
+});
+
+// mongoose
+app.get("/test-db", async (req, res) => {
+  try {
+    const state = mongoose.connection.readyState;
+
+    res.json({
+      mongoState: state,
+      message: "DB test route working"
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
 });
 
 // Routes
