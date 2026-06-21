@@ -30,6 +30,12 @@ app.use(
 // Middleware
 app.use(express.json());
 
+app.get("/test-db", (req, res) => {
+  res.json({
+    mongoState: mongoose.connection.readyState
+  });
+});
+
 // Test Route
 app.get("/", (req, res) => {
   res.send("Amazon Clone Backend Running");
